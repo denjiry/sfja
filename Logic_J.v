@@ -204,7 +204,8 @@ Proof.
 Theorem proj2 : forall P Q : Prop,
   P /\ Q -> Q.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros P Q H. inversion H as [HP HQ].
+  apply HQ. Qed.
 (** [] *)
 
 Theorem and_commut : forall P Q : Prop,
@@ -251,7 +252,8 @@ Theorem and_assoc : forall P Q R : Prop,
 Proof.
   intros P Q R H.
   inversion H as [HP [HQ HR]].
-(* FILL IN HERE *) Admitted.
+  split. split. apply HP. apply HQ. apply HR.
+  Qed.
 (** [] *)
 
 (** **** 練習問題: ★★, recommended (even_ev) *)
@@ -276,7 +278,17 @@ Theorem even_ev : forall n : nat,
   (even n -> ev n) /\ (even (S n) -> ev (S n)).
 Proof.
   (* ヒント: nに帰納法を使います. *)
-  (* FILL IN HERE *) Admitted.
+  intros n.
+  unfold even.
+  induction n as [| n'].
+  Case "n=0".
+  simpl. split. intros eq. apply ev_0.
+  intros eq. discriminate eq.
+  Case "n=S n'".
+  inversion IHn' as [Hn' HSn'].
+  split. apply HSn'.
+  simpl. intros eeqH.
+  apply ev_SS. apply (Hn' eeqH). Qed.
 (** [] *)
 
 (** **** 練習問題: ★★ *)
