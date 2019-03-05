@@ -757,7 +757,9 @@ Proof.
 Theorem not_both_true_and_false : forall P : Prop,
   ~ (P /\ ~P).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros. unfold not. intros H.
+  inversion H as [TP NP].
+  apply NP. apply TP. Qed.
 (** [] *)
 
 Theorem five_not_even :
@@ -777,8 +779,11 @@ Proof.
 Theorem ev_not_ev_S : forall n,
   ev n -> ~ ev (S n).
 Proof.
-  unfold not. intros n H. induction H. (* not n! *)
-  (* FILL IN HERE *) Admitted.
+  unfold not. intros n H. induction H.
+  intros H1. inversion H1.
+  (* not n! *)
+  intros H2. inversion H2 as [|n' Hev b].
+  apply IHev. apply Hev. Qed.
 (** [] *)
 
 (*  **** Exercise: 1 star (informal_not_PNP) *)
@@ -791,7 +796,7 @@ Proof.
 (** [] *)
 
 (*  Note that some theorems that are true in classical logic
-    are _not_ provable in Coq's "built in" constructive logic... *)
+    are _not_ provable in Coq's "built in" constructive logi.. *)
 (** このうちいくつかは、古典論理ではtrueと判断できるにもかかわらず、Coqに組み込まれた機能だけでは
     証明できないものがあるので注意が必要です。
  *)
@@ -877,6 +882,7 @@ Theorem not_eq_beq_false : forall n n' : nat,
      n <> n' ->
      beq_nat n n' = false.
 Proof.
+  intros n n' H. 
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -1041,7 +1047,9 @@ Definition p : ex nat (fun n => ev (S n)) :=
 Theorem dist_not_exists : forall (X:Type) (P : X -> Prop),
   (forall x, P x) -> ~ (exists x, ~ P x).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros X XP PH NH. 
+  inversion NH as [x NP]. unfold not in NP.
+  apply NP. apply PH. Qed.
 (** [] *)
 
 (*  **** Exercise: 3 stars, optional (not_exists_dist) *)
@@ -1824,7 +1832,7 @@ Inductive nostutter:  list nat -> Prop :=
     状態で確認できればいいのですが、もしそうしたいなら、これらの証明をもっと
     基本的なタクティックで書き換えて証明してもかまいません。
  *)
-Example test_nostutter_1:      nostutter [3,1,4,1,5,6].
+Example test_nostutter_1:      nostutter [3;1;4;1;5;6].
 (* FILL IN HERE *) Admitted.
 (*
   Proof. repeat constructor; apply beq_false_not_eq; auto. Qed.
@@ -1842,7 +1850,7 @@ Example test_nostutter_3:  nostutter [5].
   Proof. repeat constructor; apply beq_false_not_eq; auto. Qed.
 *)
 
-Example test_nostutter_4:      not (nostutter [3,1,1,4]).
+Example test_nostutter_4:      not (nostutter [3;1;1;4]).
 (* FILL IN HERE *) Admitted.
 (*
   Proof. intro.
