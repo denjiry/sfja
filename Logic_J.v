@@ -882,7 +882,7 @@ Theorem not_eq_beq_false : forall n n' : nat,
      n <> n' ->
      beq_nat n n' = false.
 Proof.
-  intros n n' H. 
+  intros n n' H.
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -1047,7 +1047,7 @@ Definition p : ex nat (fun n => ev (S n)) :=
 Theorem dist_not_exists : forall (X:Type) (P : X -> Prop),
   (forall x, P x) -> ~ (exists x, ~ P x).
 Proof.
-  intros X XP PH NH. 
+  intros X XP PH NH.
   inversion NH as [x NP]. unfold not in NP.
   apply NP. apply PH. Qed.
 (** [] *)
