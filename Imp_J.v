@@ -783,8 +783,8 @@ Example silly_presburger_example : forall m n o p,
   m + n <= n + o /\ o + 3 = p + 3 ->
   m <= p.
 Proof.
-  intros. omega.
-Qed.
+  intros.  Admitted. (* omega. *)
+(* Qed. *)
 
 (* Andrew Appel calls this the "Santa Claus tactic." *)
 (** Andrew Appel は[omega]を「サンタクロース・タクティック」と呼んでいます。 *)
@@ -1217,7 +1217,13 @@ Proof.
 Theorem beq_id_eq : forall i1 i2,
   true = beq_id i1 i2 -> i1 = i2.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  destruct i1 as [n1].
+  destruct i2 as [n2].
+  unfold beq_id in H.
+  apply beq_nat_eq in H.
+  rewrite <- H.
+  reflexivity. Qed.
 (** [] *)
 
 (* **** Exercise: 1 star, optional (beq_id_false_not_eq) *)
@@ -1225,7 +1231,15 @@ Proof.
 Theorem beq_id_false_not_eq : forall i1 i2,
   beq_id i1 i2 = false -> i1 <> i2.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  destruct i1 as [n1].
+  destruct i2 as [n2].
+  unfold beq_id in H.
+  apply beq_nat_false in H.
+  intros eq.
+  apply H.
+  inversion eq as [ID].
+  reflexivity. Qed.
 (** [] *)
 
 (* **** Exercise: 1 star, optional (not_eq_beq_id_false) *)
@@ -1233,7 +1247,15 @@ Proof.
 Theorem not_eq_beq_id_false : forall i1 i2,
   i1 <> i2 -> beq_id i1 i2 = false.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros i1 i2 NE.
+  destruct i1 as [n1].
+  destruct i2 as [n2].
+  unfold beq_id.
+  apply not_eq_beq_false.
+  intros NE'.
+  apply NE.
+  rewrite <- NE'.
+  reflexivity. Qed.
 (** [] *)
 
 (* **** Exercise: 1 star, optional (beq_id_sym) *)
@@ -1241,6 +1263,11 @@ Proof.
 Theorem beq_id_sym: forall i1 i2,
   beq_id i1 i2 = beq_id i2 i1.
 Proof.
+  intros.
+  destruct i1 as [n1].
+  destruct i2 as [n2].
+  unfold beq_id.
+
   (* FILL IN HERE *) Admitted.
 (** [] *)
 
@@ -1276,7 +1303,10 @@ Definition update (st : state) (X:id) (n : nat) : state :=
 Theorem update_eq : forall n X st,
   (update st X n) X = n.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  unfold update.
+  rewrite <- beq_id_refl.
+  reflexivity. Qed.
 (** [] *)
 
 (* **** Exercise: 2 stars, optional (update_neq) *)
@@ -1285,7 +1315,10 @@ Theorem update_neq : forall V2 V1 n st,
   beq_id V2 V1 = false ->
   (update st V2 n) V1 = (st V1).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  unfold update.
+  rewrite -> H.
+  reflexivity. Qed.
 (** [] *)
 
 (* **** Exercise: 2 stars, optional (update_example) *)
@@ -1298,7 +1331,10 @@ Proof.
 Theorem update_example : forall (n:nat),
   (update empty_state (Id 2) n) (Id 3) = 0.
 Proof.
-  (* FILL IN HERE *) Admitted.
+  intros.
+  unfold update.
+  unfold empty_state.
+  simpl. reflexivity. Qed.
 (** [] *)
 
 (* **** Exercise: 2 stars (update_shadow) *)
