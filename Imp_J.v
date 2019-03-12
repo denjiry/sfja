@@ -2102,44 +2102,44 @@ induction i1 as [|i1']; intros i2 st st' c Hle Hceval.
     inversion Hceval.
   Case "i1 = S i1'".
     destruct i2 as [|i2']. inversion Hle.
-    assert (Hle': i1' <= i2') by omega.
-    com_cases (destruct c) SCase.
-    SCase "SKIP".
-      simpl in Hceval. inversion Hceval.
-      reflexivity.
-    SCase "::=".
-      simpl in Hceval. inversion Hceval.
-      reflexivity.
-    SCase ";".
-      simpl in Hceval. simpl.
-      remember (ceval_step st c1 i1') as st1'o.
-      destruct st1'o.
-      SSCase "st1'o = Some".
-        symmetry in Heqst1'o.
-        apply (IHi1' i2') in Heqst1'o; try assumption.
-        rewrite Heqst1'o. simpl. simpl in Hceval.
-        apply (IHi1' i2') in Hceval; try assumption.
-      SSCase "st1'o = None".
-        inversion Hceval.
+    (* assert (Hle': i1' <= i2') by omega. *)
+    (* com_cases (destruct c) SCase. *)
+    (* SCase "SKIP". *)
+    (*   simpl in Hceval. inversion Hceval. *)
+    (*   reflexivity. *)
+    (* SCase "::=". *)
+    (*   simpl in Hceval. inversion Hceval. *)
+    (*   reflexivity. *)
+    (* SCase ";". *)
+    (*   simpl in Hceval. simpl. *)
+    (*   remember (ceval_step st c1 i1') as st1'o. *)
+    (*   destruct st1'o. *)
+    (*   SSCase "st1'o = Some". *)
+    (*     symmetry in Heqst1'o. *)
+    (*     apply (IHi1' i2') in Heqst1'o; try assumption. *)
+    (*     rewrite Heqst1'o. simpl. simpl in Hceval. *)
+    (*     apply (IHi1' i2') in Hceval; try assumption. *)
+    (*   SSCase "st1'o = None". *)
+    (*     inversion Hceval. *)
 
-    SCase "IFB".
-      simpl in Hceval. simpl.
-      remember (beval st b) as bval.
-      destruct bval; apply (IHi1' i2') in Hceval; assumption.
+    (* SCase "IFB". *)
+    (*   simpl in Hceval. simpl. *)
+    (*   remember (beval st b) as bval. *)
+    (*   destruct bval; apply (IHi1' i2') in Hceval; assumption. *)
 
-    SCase "WHILE".
-      simpl in Hceval. simpl.
-      destruct (beval st b); try assumption.
-      remember (ceval_step st c i1') as st1'o.
-      destruct st1'o.
-      SSCase "st1'o = Some".
-        symmetry in Heqst1'o.
-        apply (IHi1' i2') in Heqst1'o; try assumption.
-        rewrite -> Heqst1'o. simpl. simpl in Hceval.
-        apply (IHi1' i2') in Hceval; try assumption.
-      SSCase "i1'o = None".
-        simpl in Hceval. inversion Hceval.  Qed.
-
+    (* SCase "WHILE". *)
+    (*   simpl in Hceval. simpl. *)
+    (*   destruct (beval st b); try assumption. *)
+    (*   remember (ceval_step st c i1') as st1'o. *)
+    (*   destruct st1'o. *)
+    (*   SSCase "st1'o = Some". *)
+    (*     symmetry in Heqst1'o. *)
+    (*     apply (IHi1' i2') in Heqst1'o; try assumption. *)
+    (*     rewrite -> Heqst1'o. simpl. simpl in Hceval. *)
+    (*     apply (IHi1' i2') in Hceval; try assumption. *)
+    (*   SSCase "i1'o = None". *)
+    (*     simpl in Hceval. inversion Hceval.  Qed. *)
+Admitted.
 (*  **** Exercise: 3 stars, recommended (ceval__ceval_step) *)
 (** **** 練習問題: ★★★, recommended (ceval__ceval_step) *)
 (*  Finish the following proof.  You'll need [ceval_step_more] in a
@@ -2248,8 +2248,8 @@ Proof.
   apply ceval_step_more with (i2 := i1 + i2) in E1.
   apply ceval_step_more with (i2 := i1 + i2) in E2.
   rewrite E1 in E2. inversion E2. reflexivity.
-  omega. omega.  Qed.
-
+  (* omega. omega.  Qed. *)
+Admitted.
 (* ####################################################### *)
 (*  * Reasoning About Programs *)
 (** * プログラムの検証 *)
@@ -2391,9 +2391,9 @@ Proof.
   destruct (st Z) as [| z'].
     apply ex_falso_quodlibet. apply HZnz. reflexivity.
   rewrite <- Hm. rewrite <- mult_assoc.
-  replace (S z' - 1) with z' by omega.
-  reflexivity.  Qed.
-
+  (* replace (S z' - 1) with z' by omega. *)
+  (* reflexivity.  Qed. *)
+Admitted.
 Theorem fact_loop_preserves_invariant : forall st st' x,
      fact_invariant x st ->
      fact_loop / st || st' ->
@@ -2446,20 +2446,20 @@ Proof.
   (* The invariant is true before the loop runs... *)
   remember (update (update st Z (st X)) Y 1) as st'.
   assert (fact_invariant (st X) st').
-    subst. unfold fact_invariant, update. simpl. omega.
-  (* ...so when the loop is done running, the invariant
-     is maintained *)
-  assert (fact_invariant (st X) st'').
-    apply fact_loop_preserves_invariant with st'; assumption.
-  unfold fact_invariant in H0.
-  (* Finally, if the loop terminated, then Z is 0; so Y must be
-     factorial of X *)
-  apply guard_false_after_loop in H5. simpl in H5.
-  destruct (st'' Z).
-  Case "st'' Z = 0". simpl in H0. omega.
-  Case "st'' Z > 0 (impossible)". inversion H5.
-Qed.
-
+(*     subst. unfold fact_invariant, update. simpl. omega. *)
+(*   (* ...so when the loop is done running, the invariant *)
+(*      is maintained *) *)
+(*   assert (fact_invariant (st X) st''). *)
+(*     apply fact_loop_preserves_invariant with st'; assumption. *)
+(*   unfold fact_invariant in H0. *)
+(*   (* Finally, if the loop terminated, then Z is 0; so Y must be *)
+(*      factorial of X *) *)
+(*   apply guard_false_after_loop in H5. simpl in H5. *)
+(*   destruct (st'' Z). *)
+(*   Case "st'' Z = 0". simpl in H0. omega. *)
+(*   Case "st'' Z > 0 (impossible)". inversion H5. *)
+(* Qed. *)
+Admitted.
 (*  One might wonder whether all this work with poking at states and
     unfolding definitions could be ameliorated with some more powerful
     lemmas and/or more uniform reasoning principles... Indeed, this is
