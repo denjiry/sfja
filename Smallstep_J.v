@@ -351,7 +351,10 @@ Example test_step_2 :
           (tm_const 2)
           (tm_const (plus 0 3))).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  apply ST_Plus2.
+  apply ST_Plus2.
+  apply ST_PlusConstConst.
+  Qed.
 (** [] *)
 
 (* One interesting property of the [==>] relation is that, like the
