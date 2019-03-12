@@ -191,7 +191,13 @@ Definition symmetric {X: Type} (R: relation X) :=
 Theorem le_not_symmetric :
   ~ (symmetric le).
 Proof.
-  (* FILL IN HERE *) Admitted.
+  unfold symmetric.
+  intros contra.
+  assert (1 <= 0) as NH10.
+  apply contra.
+  apply le_S.
+  apply le_n.
+  inversion NH10. Qed.
 (** [] *)
 
 (** 関係[R]が反対称的(_antisymmetric_)であるとは、[R a b]かつ[R b a]ならば
